@@ -1,13 +1,3 @@
-/* TODO:
- 
- - generate apropiate amount of colours!
- - 
- 
- 
- 
- */
-
-
 class Renderer {
   boolean isJuliaRenderer;
   double juliaVRange;
@@ -17,6 +7,7 @@ class Renderer {
   ArrayList<Body> Particles;
   ArrayList<Body> Particles_done;
   ArrayList<Body> Bodies;
+  int currentiteration = 0;
   public Renderer(ArrayList<Planet> planets, float x1, float y1, float x2, float y2, float dt, int amount, int iterations, int corecount, int draw_every) {
     this.x1 = x1;
     this.y1 = y1;
@@ -47,6 +38,7 @@ class Renderer {
 
     // Iterate until we want to draw again
     for (int i = 0; i < iterations; i++) {
+      currentiteration = i;
       for (int j = 0; j < split_particles.length; j++) {
         thread_array[j] = new MyThread(split_particles[j], Bodies, dt);
         thread_array[j].start();
@@ -127,15 +119,6 @@ class Renderer {
         }
       }
       
-      /*
-      old method - buggy.
-      double stepsize = ((double)(x2 - x1)) / ((double)amount);
-      for (double x = x1; x < x2; x += stepsize) {
-        for (double y = y2; y < y1; y += stepsize) {
-          Particles.add(new Body(x, y, 0, color(255)));
-        }
-      }
-      */
     } else {  // Julia Renderer
       background(0);
       for (int i = Particles.size() - 1; i > 0; i--) {
