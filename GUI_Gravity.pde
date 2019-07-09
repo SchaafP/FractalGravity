@@ -580,7 +580,6 @@ void InitializeUI() {
     .setPosition(50, height-50)
     .setSize(80, 20);
 }
-
 void updateUIPositions() {
   // Partikelzahl in x/y Richtung
   cp5.get(Textfield.class, "Amount").setPosition(width-125, 100);
