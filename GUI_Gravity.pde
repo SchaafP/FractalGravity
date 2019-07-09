@@ -7,7 +7,6 @@
  - save images when rendering?
  - draw image at correct location
  - bugtracking
- 
  */
 // Buttons und Textfelder
 import controlP5.*;
@@ -58,9 +57,7 @@ void setup() {
 }
 
 void draw() {
-
   background(75);
-  updateUIPositions();
   drawUI();
 }
 
@@ -170,7 +167,6 @@ void Zoom() {
 }
 
 void drawJuliaUI() {
-
   strokeWeight(2);
   stroke(255, 0, 0);
   if (mouseInGrid()) {
@@ -579,40 +575,15 @@ void InitializeUI() {
   cp5.addBang("switchView")
     .setPosition(50, height-50)
     .setSize(80, 20);
+    
+  cp5.addBang("saveImages")
+    .setPosition(150, height - 50)
+    .setSize(80, 20);
 }
-void updateUIPositions() {
-  // Partikelzahl in x/y Richtung
-  cp5.get(Textfield.class, "Amount").setPosition(width-125, 100);
-  // Links oben x
-  cp5.get(Textfield.class, "x1").setPosition(width-125, 150);
-  // Links oben y
-  cp5.get(Textfield.class, "y1").setPosition(width-125, 200);
-  // Rechts unten x
-  cp5.get(Textfield.class, "x2").setPosition(width-125, 250);
-  // Rechts unten y
-  cp5.get(Textfield.class, "y2").setPosition(width-125, 300);
-  // Render-Button
-  cp5.get(Bang.class, "Render").setPosition(width - 125, 1000 - 125);
-  // Iterationen
-  cp5.get(Textfield.class, "Iterations").setPosition(width - 125, 1000 - 165);
-  // Zoom-In-Button
-  cp5.get(Bang.class, "Zoom").setPosition(width - 125, 1000 - 245);
-  //Zoom-Out-Button
-  cp5.get(Bang.class, "ZoomOut").setPosition(width - 125, 1000 - 285);
-  // Add-Planet-Button
-  cp5.get(Bang.class, "AddPlanet").setPosition(width - 125, 1000 - 440);
-  //Remove-Planet-Button
-  cp5.get(Bang.class, "RemoveLastPlanet").setPosition(width - 125, 1000 - 400);
-  // Planet x
-  cp5.get(Textfield.class, "PlanetX").setPosition(width-125, 1000 - 600);
-  // Planet y
-  cp5.get(Textfield.class, "PlanetY").setPosition(width-125, 1000 - 550);
-  // Planet Mass
-  cp5.get(Textfield.class, "PlanetMass").setPosition(width-125, 1000 - 500);
-  //Julia-Button
-  cp5.get(Bang.class, "Julia").setPosition(width/2, height-50);
-  
-  cp5.get(Textfield.class, "VRange").setPosition(width/2 - 100, height - 50);
+
+void saveImages(){
+  img.save("normal.png");
+  img_Julia.save("julia.png");
 }
 
 
