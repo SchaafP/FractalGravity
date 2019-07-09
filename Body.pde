@@ -8,14 +8,14 @@ class Body {
     c     = c_;
 
   }
-  color c;
-  double x1_0;
-  double x1;
-  double x2_0;
-  double x2;
-  double v1;
-  double v2;
-  double m;
+  color c;        // color of landing Planet
+  double x1_0;    // initial x position
+  double x1;      // current x position
+  double x2_0;    // initial y position
+  double x2;      // current y position
+  double v1;      // current x velocity
+  double v2;      // current y velocity
+  double m;       // mass
   boolean done = false;
   boolean added = false;
 }
