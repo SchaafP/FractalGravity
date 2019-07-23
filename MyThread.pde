@@ -10,6 +10,7 @@ class MyThread extends Thread{
    }
  
    public void run(){
-      List = iterateparticles(List, Bodies, dt);
+      //List = iterateparticles(List, Bodies, dt);
+      List = iterateVerlet(List,Bodies,dt);
    }
 }
