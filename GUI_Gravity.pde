@@ -7,6 +7,7 @@
  - save images when rendering?
  - draw image at correct location
  - bugtracking
+ 
  */
 // Buttons und Textfelder
 import controlP5.*;
@@ -24,7 +25,7 @@ int gridy;
 int gridwidth;
 
 // Thread-Number
-int corecount = 8;
+int corecount = 4;
 int draw_every = 100; // continous Render parameter - unused atm
 
 boolean isZooming;
@@ -167,6 +168,7 @@ void Zoom() {
 }
 
 void drawJuliaUI() {
+
   strokeWeight(2);
   stroke(255, 0, 0);
   if (mouseInGrid()) {
@@ -233,10 +235,10 @@ void JuliaRender() {
 
   Renderer JR = new Renderer(Planets, p.x, p.y, 0, 0, dt, amount, iterations, corecount, draw_every);
   JR.isJuliaRenderer = true;
-  
+
   String vrange_ = cp5.get(Textfield.class, "VRange").getText();
   float vrange = isFloat(vrange_) ? Float.parseFloat(vrange_) : 0;
-  
+
   JR.juliaVRange = vrange; // velocity range
   JR.initialize();
   JR.iterate();
@@ -473,6 +475,46 @@ ArrayList<Body> iterateparticles(ArrayList<Body> particles, ArrayList<Body> Bodi
   return particles;
 }
 
+
+ArrayList<Body> iterateVerlet(ArrayList<Body> particles, ArrayList<Body> Bodies, double dt) {
+  for (int i = particles.size() - 1; i > 0; i--) {
+    Body p = particles.get(i);
+    if (!p.done) {
+      double a = 0;
+      double a1 = 0;
+      double a2 = 0;
+      for (int j = 0; j < Bodies.size(); j++) {
+        Body B = Bodies.get(j);
+        double d = sqrt(pow(((float)B.x1 - (float)p.x1), 2)+pow(((float)B.x2 - (float)p.x2), 2));
+        if (d < 5 && !p.done) {
+          p.done = true;
+          p.c = B.c;
+        }
+        a = B.m * (1/(d*d*d));
+        a1 += a * (B.x1 - p.x1);
+        a2 += a * (B.x2 - p.x2);
+      }
+      p.x1 += 0.5 * a1 * dt * dt + p.v1 * dt;
+      p.x2 += 0.5 * a2 * dt * dt + p.v2 * dt;
+      double a_new = 0;
+      double a1_new = 0;
+      double a2_new = 0;
+      for (int j = 0; j < Bodies.size(); j++) {
+        Body B = Bodies.get(j);
+        double d = sqrt(pow(((float)B.x1 - (float)p.x1), 2)+pow(((float)B.x2 - (float)p.x2), 2));
+        a_new = B.m * (1/(d*d*d));
+        a1_new += a_new * (B.x1 - p.x1);
+        a2_new += a_new * (B.x2 - p.x2);
+      }
+      p.v1 = p.v1 + ((a1 + a1_new)/2.0)*dt;
+      p.v2 = p.v2 + ((a2 + a2_new)/2.0)*dt;
+    }
+  }
+  return particles;
+}
+
+
+
 void InitializeUI() {
   cp5 = new ControlP5(this);
 
@@ -565,7 +607,7 @@ void InitializeUI() {
   cp5.addBang("Julia")
     .setPosition(width/2, height-50)
     .setSize(80, 20);
-  
+
   cp5.addTextfield("VRange")
     .setPosition(width/2 - 100, height - 50)
     .setSize(80, 20)
@@ -575,15 +617,6 @@ void InitializeUI() {
   cp5.addBang("switchView")
     .setPosition(50, height-50)
     .setSize(80, 20);
-    
-  cp5.addBang("saveImages")
-    .setPosition(150, height - 50)
-    .setSize(80, 20);
-}
-
-void saveImages(){
-  img.save("normal.png");
-  img_Julia.save("julia.png");
 }
 
 
